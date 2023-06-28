@@ -17,6 +17,10 @@ public class CustomAdapter extends BaseAdapter {
         this.userRepository = userRepository;
     }
 
+    public void saveUser(String email, String name) {
+        userRepository.save(email, name);
+    }
+
     @Override
     public int getCount() {
         return userRepository.getCount();
