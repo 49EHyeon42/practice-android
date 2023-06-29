@@ -19,8 +19,7 @@ public class CustomAdapter extends BaseAdapter {
     }
 
     public void saveUser(String email, String name) {
-        Log.i("CustomAdapter", "saveUser: " + email + " " + name); // TODO clear
-        userRepository.save(email, name);
+        userRepository.save(new UserDto(email, name));
     }
 
     @Override

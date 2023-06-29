@@ -21,7 +21,7 @@ public class UserViewModel extends ViewModel {
         return userRepository.findAllUserToLiveData();
     }
 
-    public void saveUser(String email, String name) {
-        userRepository.save(email, name);
+    public void saveUser(UserDto userDto) {
+        userRepository.save(userDto);
     }
 }

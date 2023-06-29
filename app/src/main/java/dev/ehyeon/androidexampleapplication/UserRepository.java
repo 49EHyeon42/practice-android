@@ -12,10 +12,10 @@ public class UserRepository {
         this.userDao = userDao;
     }
 
-    public void save(String email, String name) {
+    public void save(UserDto userDto) {
         User user = new User();
-        user.email = email;
-        user.name = name;
+        user.email = userDto.getEmail();
+        user.name = userDto.getName();
 
         userDao.insertUser(user);
     }

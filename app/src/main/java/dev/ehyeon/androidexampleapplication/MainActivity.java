@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
                 // adapter.saveUser(etEmail.getText().toString(), etName.getText().toString());
 
-                userRepository.save(etEmail.getText().toString(), etName.getText().toString());
+                userRepository.save(new UserDto(etEmail.getText().toString(), etName.getText().toString()));
 
                 // TODO clear, debug
 //                List<User> allUser = userRepository.findAllUser();
