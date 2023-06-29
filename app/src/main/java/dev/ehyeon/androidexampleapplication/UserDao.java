@@ -9,22 +9,28 @@ import androidx.room.Query;
 import java.util.List;
 
 @Dao
-public interface UserDao { // TODO fix select, insert, update, delete 순서로
+public interface UserDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    Long insertUser(User user);
-
+    // SELECT
     @Query("SELECT * FROM user WHERE id = :id")
     List<User> selectUserById(long id);
 
     @Query("SELECT * FROM user")
     List<User> selectAllUser();
 
-    @Query("SELECT * FROM user")
-    LiveData<List<User>> selectAllUserToLiveData();
+    // INSERT
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    Long insertUser(User user);
 
+    // UPDATE
+
+    // DELETE
     @Query("DELETE FROM user")
     void deleteAllUser();
+
+    // etc.
+    @Query("SELECT * FROM user")
+    LiveData<List<User>> selectAllUserToLiveData();
 
     @Query("SELECT COUNT(*) FROM user")
     int count();

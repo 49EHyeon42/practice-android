@@ -22,6 +22,6 @@ public class UserViewModel extends ViewModel {
     }
 
     public void saveUser(UserDto userDto) {
-        userRepository.save(userDto);
+        userRepository.saveUser(userDto);
     }
 }

@@ -12,14 +12,6 @@ public class UserRepository {
         this.userDao = userDao;
     }
 
-    public void save(UserDto userDto) {
-        User user = new User();
-        user.email = userDto.getEmail();
-        user.name = userDto.getName();
-
-        userDao.insertUser(user);
-    }
-
     public User findUserById(Long id) {
         List<User> users = userDao.selectUserById(id);
         return users.isEmpty() ? null : users.get(0);
@@ -29,12 +21,20 @@ public class UserRepository {
         return userDao.selectAllUser();
     }
 
-    public LiveData<List<User>> findAllUserToLiveData() {
-        return userDao.selectAllUserToLiveData();
+    public void saveUser(UserDto userDto) {
+        User user = new User();
+        user.email = userDto.getEmail();
+        user.name = userDto.getName();
+
+        userDao.insertUser(user);
     }
 
     public void deleteAllUser() {
         userDao.deleteAllUser();
+    }
+
+    public LiveData<List<User>> findAllUserToLiveData() {
+        return userDao.selectAllUserToLiveData();
     }
 
     public int getCount() {

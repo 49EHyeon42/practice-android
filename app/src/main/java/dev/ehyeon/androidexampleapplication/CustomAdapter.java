@@ -1,7 +1,6 @@
 package dev.ehyeon.androidexampleapplication;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +18,7 @@ public class CustomAdapter extends BaseAdapter {
     }
 
     public void saveUser(String email, String name) {
-        userRepository.save(new UserDto(email, name));
+        userRepository.saveUser(new UserDto(email, name));
     }
 
     @Override
@@ -64,9 +63,6 @@ public class CustomAdapter extends BaseAdapter {
             if (user.name != null) {
                 viewHolder.tvName.setText(user.name);
             }
-
-            // TODO clear
-            Log.i("DDD", "id = " + user.id + " email = " + user.email + " name = " + user.name);
         }
 
         return convertView;

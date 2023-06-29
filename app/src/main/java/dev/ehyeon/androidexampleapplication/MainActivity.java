@@ -10,11 +10,8 @@ import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -45,12 +42,9 @@ public class MainActivity extends AppCompatActivity {
         }).get(UserViewModel.class);
 
         // DEBUG
-        userViewModel.findAllUserToLiveData().observe(this, new Observer<List<User>>() {
-            @Override
-            public void onChanged(List<User> users) {
-                for (User user : users) {
-                    Log.i("CheckUser", user.email);
-                }
+        userViewModel.findAllUserToLiveData().observe(this, users -> {
+            for (User user : users) {
+                Log.i("CheckUser", user.email);
             }
         });
 
@@ -72,16 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
                 // adapter.saveUser(etEmail.getText().toString(), etName.getText().toString());
 
-                userRepository.save(new UserDto(etEmail.getText().toString(), etName.getText().toString()));
-
-                // TODO clear, debug
-//                List<User> allUser = userRepository.findAllUser();
-//
-//                for (User u : allUser) {
-//                    Log.i("Test", u.email);
-//                }
-
-                // adapter.notifyDataSetChanged();
+                userRepository.saveUser(new UserDto(etEmail.getText().toString(), etName.getText().toString()));
             });
 
             dialogBuilder.setNegativeButton("취소", null);
