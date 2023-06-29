@@ -1,7 +1,6 @@
 package dev.ehyeon.androidexampleapplication;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,8 +14,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 public class MainActivity extends AppCompatActivity {
 
-    private CustomAdapter adapter;
-
     private UserViewModel userViewModel;
 
     @Override
@@ -27,31 +24,26 @@ public class MainActivity extends AppCompatActivity {
         ListView listView = findViewById(R.id.listView);
         Button button = findViewById(R.id.button);
 
-        UserRepository userRepository = ((EHyeonApplication) getApplication()).getUserRepository();
-
         userViewModel = new ViewModelProvider(this, new ViewModelProvider.Factory() {
             @NonNull
             @Override
             @SuppressWarnings("unchecked")
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
                 if (modelClass.isAssignableFrom(UserViewModel.class)) {
-                    return (T) new UserViewModel(userRepository);
+                    return (T) new UserViewModel(((EHyeonApplication) getApplication()).getUserRepository());
                 }
                 throw new IllegalArgumentException();
             }
         }).get(UserViewModel.class);
 
-        // DEBUG
-        userViewModel.findAllUserToLiveData().observe(this, users -> {
-            for (User user : users) {
-                Log.i("CheckUser", user.email);
-            }
-        });
-
-        // TODO refactor
-        adapter = new CustomAdapter(this, userRepository);
+        CustomAdapter adapter = new CustomAdapter(this, userViewModel.findAllUser());
 
         listView.setAdapter(adapter);
+
+        userViewModel.findAllUserToLiveData().observe(this, users -> {
+            adapter.updateList(users);
+            adapter.notifyDataSetChanged();
+        });
 
         button.setOnClickListener(view -> {
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
@@ -64,9 +56,7 @@ public class MainActivity extends AppCompatActivity {
                 EditText etEmail = dialogView.findViewById(R.id.etEmail);
                 EditText etName = dialogView.findViewById(R.id.etName);
 
-                // adapter.saveUser(etEmail.getText().toString(), etName.getText().toString());
-
-                userRepository.saveUser(new UserDto(etEmail.getText().toString(), etName.getText().toString()));
+                userViewModel.saveUser(new UserDto(etEmail.getText().toString(), etName.getText().toString()));
             });
 
             dialogBuilder.setNegativeButton("취소", null);

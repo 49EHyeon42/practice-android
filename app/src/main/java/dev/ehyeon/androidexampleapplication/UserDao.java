@@ -31,7 +31,4 @@ public interface UserDao {
     // etc.
     @Query("SELECT * FROM user")
     LiveData<List<User>> selectAllUserToLiveData();
-
-    @Query("SELECT COUNT(*) FROM user")
-    int count();
 }

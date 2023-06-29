@@ -17,11 +17,15 @@ public class UserViewModel extends ViewModel {
         return userRepository.findUserById(id);
     }
 
-    public LiveData<List<User>> findAllUserToLiveData() {
-        return userRepository.findAllUserToLiveData();
+    public List<User> findAllUser() {
+        return userRepository.findAllUser();
     }
 
     public void saveUser(UserDto userDto) {
         userRepository.saveUser(userDto);
+    }
+
+    public LiveData<List<User>> findAllUserToLiveData() {
+        return userRepository.findAllUserToLiveData();
     }
 }

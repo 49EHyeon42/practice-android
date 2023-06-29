@@ -36,8 +36,4 @@ public class UserRepository {
     public LiveData<List<User>> findAllUserToLiveData() {
         return userDao.selectAllUserToLiveData();
     }
-
-    public int getCount() {
-        return userDao.count();
-    }
 }
