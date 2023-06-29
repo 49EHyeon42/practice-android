@@ -30,7 +30,7 @@ public class CustomAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        return userRepository.findUserById(position);
+        return userRepository.findUserById((long) position);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class CustomAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        User user = userRepository.findUserById(position);
+        User user = userRepository.findUserById((long) position);
 
         // TODO refactor
         if (user != null) {

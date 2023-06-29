@@ -1,5 +1,7 @@
 package dev.ehyeon.androidexampleapplication;
 
+import androidx.lifecycle.LiveData;
+
 import java.util.List;
 
 public class UserRepository {
@@ -18,11 +20,7 @@ public class UserRepository {
         userDao.insertUser(user);
     }
 
-    public int getCount() {
-        return userDao.count();
-    }
-
-    public User findUserById(int id) {
+    public User findUserById(Long id) {
         List<User> users = userDao.selectUserById(id);
         return users.isEmpty() ? null : users.get(0);
     }
@@ -31,7 +29,15 @@ public class UserRepository {
         return userDao.selectAllUser();
     }
 
+    public LiveData<List<User>> findAllUserToLiveData() {
+        return userDao.selectAllUserToLiveData();
+    }
+
     public void deleteAllUser() {
         userDao.deleteAllUser();
+    }
+
+    public int getCount() {
+        return userDao.count();
     }
 }
