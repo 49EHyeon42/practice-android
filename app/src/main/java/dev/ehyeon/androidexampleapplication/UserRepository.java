@@ -1,25 +1,37 @@
 package dev.ehyeon.androidexampleapplication;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class UserRepository {
 
-    private final List<User> storage;
+    private final UserDao userDao;
 
-    public UserRepository() {
-        storage = new ArrayList<>();
+    public UserRepository(UserDao userDao) {
+        this.userDao = userDao;
     }
 
     public void save(String email, String name) {
-        storage.add(new User(email, name));
+        User user = new User();
+        user.email = email;
+        user.name = name;
+
+        userDao.insertUser(user);
     }
 
     public int getCount() {
-        return storage.size();
+        return userDao.count();
     }
 
-    public User findUserByPosition(int position) {
-        return storage.get(position);
+    public User findUserById(int id) {
+        List<User> users = userDao.selectUserById(id);
+        return users.isEmpty() ? null : users.get(0);
+    }
+
+    public List<User> findAllUser() {
+        return userDao.selectAllUser();
+    }
+
+    public void deleteAllUser() {
+        userDao.deleteAllUser();
     }
 }

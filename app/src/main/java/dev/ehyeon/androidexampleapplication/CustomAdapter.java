@@ -1,6 +1,7 @@
 package dev.ehyeon.androidexampleapplication;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ public class CustomAdapter extends BaseAdapter {
     }
 
     public void saveUser(String email, String name) {
+        Log.i("CustomAdapter", "saveUser: " + email + " " + name); // TODO clear
         userRepository.save(email, name);
     }
 
@@ -28,7 +30,7 @@ public class CustomAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        return userRepository.findUserByPosition(position);
+        return userRepository.findUserById(position);
     }
 
     @Override
@@ -52,10 +54,21 @@ public class CustomAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        User user = userRepository.findUserByPosition(position);
+        User user = userRepository.findUserById(position);
 
-        viewHolder.tvEmail.setText(user.getEmail());
-        viewHolder.tvName.setText(user.getName());
+        // TODO refactor
+        if (user != null) {
+            if (user.email != null) {
+                viewHolder.tvEmail.setText(user.email);
+            }
+
+            if (user.name != null) {
+                viewHolder.tvName.setText(user.name);
+            }
+
+            // TODO clear
+            Log.i("DDD", "id = " + user.id + " email = " + user.email + " name = " + user.name);
+        }
 
         return convertView;
     }

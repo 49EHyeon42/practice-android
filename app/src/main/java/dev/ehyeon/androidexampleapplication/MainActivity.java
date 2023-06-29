@@ -1,6 +1,7 @@
 package dev.ehyeon.androidexampleapplication;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -8,6 +9,8 @@ import android.widget.ListView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,12 +24,9 @@ public class MainActivity extends AppCompatActivity {
         ListView listView = findViewById(R.id.listView);
         Button button = findViewById(R.id.button);
 
-        UserRepository userRepository = new UserRepository();
+        UserRepository userRepository = ((EHyeonApplication) getApplication()).getUserRepository();
 
-        // Test
-        userRepository.save("Test@Email1.com", "Test1");
-        userRepository.save("Test@Email2.com", "Test2");
-
+        // TODO refactor
         adapter = new CustomAdapter(this, userRepository);
 
         listView.setAdapter(adapter);
@@ -42,9 +42,18 @@ public class MainActivity extends AppCompatActivity {
                 EditText etEmail = dialogView.findViewById(R.id.etEmail);
                 EditText etName = dialogView.findViewById(R.id.etName);
 
-                adapter.saveUser(etEmail.getText().toString(), etName.getText().toString());
+                // adapter.saveUser(etEmail.getText().toString(), etName.getText().toString());
 
-                adapter.notifyDataSetChanged();
+                userRepository.save(etEmail.getText().toString(), etName.getText().toString());
+
+                // TODO clear, debug
+                List<User> allUser = userRepository.findAllUser();
+
+                for (User u : allUser) {
+                    Log.i("Test", u.email);
+                }
+
+                // adapter.notifyDataSetChanged();
             });
 
             dialogBuilder.setNegativeButton("취소", null);
