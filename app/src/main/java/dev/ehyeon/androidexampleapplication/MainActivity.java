@@ -15,8 +15,7 @@ import javax.inject.Inject;
 public class MainActivity extends AppCompatActivity {
 
     @Inject
-    public UserRepository userRepository;
-    private UserViewModel userViewModel;
+    UserViewModelFactory userViewModelFactory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,11 +25,11 @@ public class MainActivity extends AppCompatActivity {
         EHyeonComponent component = ((EHyeonApplication) getApplication()).getComponent();
         component.inject(this);
 
+        UserViewModel userViewModel = new ViewModelProvider(this, userViewModelFactory)
+                .get(UserViewModel.class);
+
         ListView listView = findViewById(R.id.listView);
         Button button = findViewById(R.id.button);
-
-        userViewModel = new ViewModelProvider(this, new UserViewModelFactory(userRepository))
-                .get(UserViewModel.class);
 
         CustomAdapter adapter = new CustomAdapter(this, userViewModel.findAllUser());
 
@@ -59,10 +58,5 @@ public class MainActivity extends AppCompatActivity {
 
             dialogBuilder.show();
         });
-    }
-
-    // INFO 추후 사용
-    public UserViewModel getUserViewModel() {
-        return userViewModel;
     }
 }

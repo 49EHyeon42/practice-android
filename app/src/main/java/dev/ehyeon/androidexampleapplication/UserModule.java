@@ -38,4 +38,9 @@ public class UserModule {
     public UserRepository provideUserRepository(UserDao userDao) {
         return new UserRepository(userDao);
     }
+
+    @Provides
+    public UserViewModelFactory provideUserViewModelFactory(UserRepository userRepository) {
+        return new UserViewModelFactory(userRepository);
+    }
 }
