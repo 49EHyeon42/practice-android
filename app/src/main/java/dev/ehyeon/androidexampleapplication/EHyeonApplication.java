@@ -2,8 +2,6 @@ package dev.ehyeon.androidexampleapplication;
 
 import android.app.Application;
 
-import androidx.room.Room;
-
 public class EHyeonApplication extends Application {
 
     private UserRepository userRepository;
@@ -12,10 +10,11 @@ public class EHyeonApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        EHyeonDatabase database = Room
-                .databaseBuilder(this, EHyeonDatabase.class, "EHyeon Database")
-                .allowMainThreadQueries() // TODO 권장하지 않는 방법, refactor
+        EHyeonComponent component = DaggerEHyeonComponent.builder()
+                .userModule(new UserModule(getApplicationContext()))
                 .build();
+
+        EHyeonDatabase database = component.getEhyeonDatabase();
 
         userRepository = new UserRepository(database.userDao());
     }
