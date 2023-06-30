@@ -17,7 +17,7 @@ import javax.inject.Inject;
 public class MainActivity extends AppCompatActivity {
 
     @Inject
-    public UserDao userDao;
+    public UserRepository userRepository;
     private UserViewModel userViewModel;
 
     @Override
@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
             @SuppressWarnings("unchecked")
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
                 if (modelClass.isAssignableFrom(UserViewModel.class)) {
-                    return (T) new UserViewModel(new UserRepository(userDao));
+                    return (T) new UserViewModel(userRepository);
                 }
                 throw new IllegalArgumentException();
             }

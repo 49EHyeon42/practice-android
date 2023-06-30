@@ -33,4 +33,9 @@ public class UserModule {
     public UserDao provideUserDao(EHyeonDatabase eHyeonDatabase) {
         return eHyeonDatabase.userDao();
     }
+
+    @Provides
+    public UserRepository provideUserRepository(UserDao userDao) {
+        return new UserRepository(userDao);
+    }
 }
