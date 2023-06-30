@@ -14,9 +14,7 @@ public class EHyeonApplication extends Application {
                 .userModule(new UserModule(getApplicationContext()))
                 .build();
 
-        EHyeonDatabase database = component.getEhyeonDatabase();
-
-        userRepository = new UserRepository(database.userDao());
+        userRepository = new UserRepository(component.getUserDao());
     }
 
     public UserRepository getUserRepository() {

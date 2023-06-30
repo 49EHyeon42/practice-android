@@ -5,5 +5,5 @@ import dagger.Component;
 @Component(modules = {UserModule.class})
 public interface EHyeonComponent {
 
-    EHyeonDatabase getEhyeonDatabase();
+    UserDao getUserDao();
 }

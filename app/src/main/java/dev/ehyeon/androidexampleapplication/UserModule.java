@@ -28,4 +28,9 @@ public class UserModule {
                 .allowMainThreadQueries() // TODO 권장하지 않는 방법, refactor
                 .build();
     }
+
+    @Provides
+    public UserDao provideUserDao(EHyeonDatabase eHyeonDatabase) {
+        return eHyeonDatabase.userDao();
+    }
 }
