@@ -12,14 +12,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import javax.inject.Inject;
+
 public class MainActivity extends AppCompatActivity {
 
+    @Inject
+    public UserDao userDao;
     private UserViewModel userViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        EHyeonComponent component = ((EHyeonApplication) getApplication()).getComponent();
+        component.inject(this);
 
         ListView listView = findViewById(R.id.listView);
         Button button = findViewById(R.id.button);
@@ -30,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
             @SuppressWarnings("unchecked")
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
                 if (modelClass.isAssignableFrom(UserViewModel.class)) {
-                    return (T) new UserViewModel(((EHyeonApplication) getApplication()).getUserRepository());
+                    return (T) new UserViewModel(new UserRepository(userDao));
                 }
                 throw new IllegalArgumentException();
             }
