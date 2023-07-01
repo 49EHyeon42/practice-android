@@ -26,6 +26,16 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    // 안드로이드 스튜디오 4.0 이상
+    buildFeatures {
+        viewBinding = true
+    }
+
+    // 안드로이드 스튜디오 3.6 ~ 3.9
+    // viewBinding {
+    //     enable true
+    // }
 }
 
 dependencies {
