@@ -12,6 +12,7 @@ public class EHyeonApplication extends Application {
 
         component = DaggerEHyeonComponent.builder()
                 .dbModule(new DbModule(this))
+                .userModule(new UserModule())
                 .build();
     }
 
