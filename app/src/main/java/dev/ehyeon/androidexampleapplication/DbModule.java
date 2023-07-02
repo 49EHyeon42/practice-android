@@ -24,7 +24,7 @@ public class DbModule {
     public EHyeonDatabase provideEHyeonDatabase() {
         return Room
                 .databaseBuilder(context, EHyeonDatabase.class, "EHyeonDatabase")
-                .allowMainThreadQueries()
+                .allowMainThreadQueries() // TODO 권장하지 않는 방법, refactor
                 .build();
     }
 
