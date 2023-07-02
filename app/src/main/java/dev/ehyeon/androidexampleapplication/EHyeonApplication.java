@@ -11,7 +11,7 @@ public class EHyeonApplication extends Application {
         super.onCreate();
 
         component = DaggerEHyeonComponent.builder()
-                .userModule(new UserModule(getApplicationContext()))
+                .dbModule(new DbModule(this))
                 .build();
     }
 
