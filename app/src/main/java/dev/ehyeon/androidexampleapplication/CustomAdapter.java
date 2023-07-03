@@ -1,69 +1,59 @@
 package dev.ehyeon.androidexampleapplication;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class CustomAdapter extends BaseAdapter {
+public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder> {
 
-    private final LayoutInflater inflater;
     private List<User> list;
 
-    public CustomAdapter(Context context, List<User> list) {
-        inflater = LayoutInflater.from(context);
+    public CustomAdapter(List<User> list) {
         this.list = list;
+    }
+
+    @NonNull
+    @Override
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new CustomAdapter.ViewHolder(LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.activity_recyclerview, parent, false));
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        holder.onBind(list.get(position));
+    }
+
+    @Override
+    public int getItemCount() {
+        return list.size();
     }
 
     public void updateList(List<User> list) {
         this.list = list;
+        notifyDataSetChanged();
     }
 
-    @Override
-    public int getCount() {
-        return list.size();
-    }
+    protected static class ViewHolder extends RecyclerView.ViewHolder {
 
-    @Override
-    public Object getItem(int position) {
-        return list.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder viewHolder;
-
-        if (convertView == null) {
-            convertView = inflater.inflate(R.layout.activity_listview, parent, false);
-
-            viewHolder = new ViewHolder();
-            viewHolder.tvEmail = convertView.findViewById(R.id.email);
-            viewHolder.tvName = convertView.findViewById(R.id.name);
-
-            convertView.setTag(viewHolder);
-        } else {
-            viewHolder = (ViewHolder) convertView.getTag();
-        }
-
-        User user = list.get(position);
-
-        viewHolder.tvEmail.setText(user.email);
-        viewHolder.tvName.setText(user.name);
-
-        return convertView;
-    }
-
-    private static class ViewHolder {
         TextView tvEmail;
         TextView tvName;
+
+        ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            tvEmail = itemView.findViewById(R.id.email);
+            tvName = itemView.findViewById(R.id.name);
+        }
+
+        void onBind(User user) {
+            tvEmail.setText(user.email);
+            tvName.setText(user.name);
+        }
     }
 }

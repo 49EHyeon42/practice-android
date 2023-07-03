@@ -7,6 +7,8 @@ import android.widget.EditText;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import javax.inject.Inject;
 
@@ -31,14 +33,13 @@ public class MainActivity extends AppCompatActivity {
         UserViewModel userViewModel = new ViewModelProvider(this, userViewModelFactory)
                 .get(UserViewModel.class);
 
-        CustomAdapter adapter = new CustomAdapter(this, userViewModel.findAllUser());
+        CustomAdapter adapter = new CustomAdapter(userViewModel.findAllUser());
 
-        binding.listView.setAdapter(adapter);
+        binding.recyclerView.setAdapter(adapter);
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        binding.recyclerView.addItemDecoration(new DividerItemDecoration(this, 1)); // 구분선
 
-        userViewModel.findAllUserToLiveData().observe(this, users -> {
-            adapter.updateList(users);
-            adapter.notifyDataSetChanged();
-        });
+        userViewModel.findAllUserToLiveData().observe(this, adapter::updateList);
 
         binding.button.setOnClickListener(view -> {
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
