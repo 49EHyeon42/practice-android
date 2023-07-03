@@ -1,4 +1,4 @@
-package dev.ehyeon.androidexampleapplication;
+package dev.ehyeon.androidexampleapplication.di;
 
 import android.app.Application;
 import android.content.Context;
@@ -9,6 +9,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import dev.ehyeon.androidexampleapplication.data.common.EHyeonDatabase;
 
 @Module
 public class DbModule {

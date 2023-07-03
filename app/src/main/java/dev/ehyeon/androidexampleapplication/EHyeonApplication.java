@@ -2,6 +2,11 @@ package dev.ehyeon.androidexampleapplication;
 
 import android.app.Application;
 
+import dev.ehyeon.androidexampleapplication.di.DaggerEHyeonComponent;
+import dev.ehyeon.androidexampleapplication.di.DbModule;
+import dev.ehyeon.androidexampleapplication.di.EHyeonComponent;
+import dev.ehyeon.androidexampleapplication.di.UserModule;
+
 public class EHyeonApplication extends Application {
 
     private EHyeonComponent component;

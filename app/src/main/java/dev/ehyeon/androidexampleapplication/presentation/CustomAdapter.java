@@ -1,4 +1,4 @@
-package dev.ehyeon.androidexampleapplication;
+package dev.ehyeon.androidexampleapplication.presentation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +9,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
+
+import dev.ehyeon.androidexampleapplication.R;
+import dev.ehyeon.androidexampleapplication.data.user.User;
 
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder> {
 

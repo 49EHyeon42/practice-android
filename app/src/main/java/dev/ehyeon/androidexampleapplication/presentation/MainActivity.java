@@ -1,4 +1,4 @@
-package dev.ehyeon.androidexampleapplication;
+package dev.ehyeon.androidexampleapplication.presentation;
 
 import android.os.Bundle;
 import android.view.View;
@@ -12,7 +12,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import javax.inject.Inject;
 
+import dev.ehyeon.androidexampleapplication.EHyeonApplication;
+import dev.ehyeon.androidexampleapplication.R;
+import dev.ehyeon.androidexampleapplication.data.user.UserDto;
 import dev.ehyeon.androidexampleapplication.databinding.ActivityMainBinding;
+import dev.ehyeon.androidexampleapplication.di.EHyeonComponent;
 
 public class MainActivity extends AppCompatActivity {
 

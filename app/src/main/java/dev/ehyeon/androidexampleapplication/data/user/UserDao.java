@@ -1,4 +1,4 @@
-package dev.ehyeon.androidexampleapplication;
+package dev.ehyeon.androidexampleapplication.data.user;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;

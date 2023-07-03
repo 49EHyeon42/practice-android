@@ -1,9 +1,13 @@
-package dev.ehyeon.androidexampleapplication;
+package dev.ehyeon.androidexampleapplication.presentation;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
 import java.util.List;
+
+import dev.ehyeon.androidexampleapplication.data.user.User;
+import dev.ehyeon.androidexampleapplication.data.user.UserDto;
+import dev.ehyeon.androidexampleapplication.data.user.UserRepository;
 
 public class UserViewModel extends ViewModel {
 

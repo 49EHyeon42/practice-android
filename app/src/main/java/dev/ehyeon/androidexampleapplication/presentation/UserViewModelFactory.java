@@ -1,8 +1,10 @@
-package dev.ehyeon.androidexampleapplication;
+package dev.ehyeon.androidexampleapplication.presentation;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
+
+import dev.ehyeon.androidexampleapplication.data.user.UserRepository;
 
 public class UserViewModelFactory implements ViewModelProvider.Factory {
 
