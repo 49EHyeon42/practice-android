@@ -1,20 +1,13 @@
 package dev.ehyeon.androidexampleapplication.presentation;
 
 import android.os.Bundle;
-import android.view.View;
-import android.widget.EditText;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import javax.inject.Inject;
 
 import dev.ehyeon.androidexampleapplication.EHyeonApplication;
 import dev.ehyeon.androidexampleapplication.R;
-import dev.ehyeon.androidexampleapplication.data.user.UserDto;
 import dev.ehyeon.androidexampleapplication.databinding.ActivityMainBinding;
 import dev.ehyeon.androidexampleapplication.di.EHyeonComponent;
 
@@ -34,34 +27,65 @@ public class MainActivity extends AppCompatActivity {
         EHyeonComponent component = ((EHyeonApplication) getApplication()).getComponent();
         component.inject(this);
 
-        UserViewModel userViewModel = new ViewModelProvider(this, userViewModelFactory)
-                .get(UserViewModel.class);
+//        UserViewModel userViewModel = new ViewModelProvider(this, userViewModelFactory)
+//                .get(UserViewModel.class);
+//
+//        CustomAdapter adapter = new CustomAdapter(userViewModel.findAllUser());
+//
+//        binding.recyclerView.setAdapter(adapter);
+//        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+//        binding.recyclerView.addItemDecoration(new DividerItemDecoration(this, 1)); // 구분선
+//
+//        userViewModel.findAllUserToLiveData().observe(this, adapter::updateList);
+//
+//        binding.button.setOnClickListener(view -> {
+//            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+//
+//            View dialogView = View.inflate(this, R.layout.activity_main_customdialog, null);
+//
+//            dialogBuilder.setView(dialogView);
+//
+//            dialogBuilder.setPositiveButton("확인", (dialog, which) -> {
+//                EditText etEmail = dialogView.findViewById(R.id.etEmail);
+//                EditText etName = dialogView.findViewById(R.id.etName);
+//
+//                userViewModel.saveUser(new UserDto(etEmail.getText().toString(), etName.getText().toString()));
+//            });
+//
+//            dialogBuilder.setNegativeButton("취소", null);
+//
+//            dialogBuilder.show();
+//        });
 
-        CustomAdapter adapter = new CustomAdapter(userViewModel.findAllUser());
+        DaggerFragment daggerFragment = new DaggerFragment();
+        Retrofit2Fragment retrofit2Fragment = new Retrofit2Fragment();
 
-        binding.recyclerView.setAdapter(adapter);
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        binding.recyclerView.addItemDecoration(new DividerItemDecoration(this, 1)); // 구분선
+        getSupportFragmentManager().beginTransaction().add(R.id.containers, daggerFragment).commit();
 
-        userViewModel.findAllUserToLiveData().observe(this, adapter::updateList);
+        binding.bottomNavigation.setOnItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.menu_dagger) {
+                if (daggerFragment.isAdded()) {
+                    getSupportFragmentManager().beginTransaction().show(daggerFragment).commit();
+                } else {
+                    getSupportFragmentManager().beginTransaction().add(R.id.containers, daggerFragment).commit();
+                }
 
-        binding.button.setOnClickListener(view -> {
-            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+                getSupportFragmentManager().beginTransaction().hide(retrofit2Fragment).commit();
 
-            View dialogView = View.inflate(this, R.layout.activity_main_customdialog, null);
+                return true;
+            } else if (item.getItemId() == R.id.menu_retrofit2) {
+                if (retrofit2Fragment.isAdded()) {
+                    getSupportFragmentManager().beginTransaction().show(retrofit2Fragment).commit();
+                } else {
+                    getSupportFragmentManager().beginTransaction().add(R.id.containers, retrofit2Fragment).commit();
+                }
 
-            dialogBuilder.setView(dialogView);
+                getSupportFragmentManager().beginTransaction().hide(daggerFragment).commit();
 
-            dialogBuilder.setPositiveButton("확인", (dialog, which) -> {
-                EditText etEmail = dialogView.findViewById(R.id.etEmail);
-                EditText etName = dialogView.findViewById(R.id.etName);
+                return true;
+            }
 
-                userViewModel.saveUser(new UserDto(etEmail.getText().toString(), etName.getText().toString()));
-            });
-
-            dialogBuilder.setNegativeButton("취소", null);
-
-            dialogBuilder.show();
+            return false;
         });
     }
 }
