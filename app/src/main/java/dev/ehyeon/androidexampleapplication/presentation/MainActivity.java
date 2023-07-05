@@ -1,67 +1,73 @@
 package dev.ehyeon.androidexampleapplication.presentation;
 
 import android.os.Bundle;
-import android.view.View;
-import android.widget.EditText;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.fragment.app.Fragment;
 
-import javax.inject.Inject;
+import java.util.stream.Stream;
 
 import dev.ehyeon.androidexampleapplication.EHyeonApplication;
 import dev.ehyeon.androidexampleapplication.R;
-import dev.ehyeon.androidexampleapplication.data.user.UserDto;
 import dev.ehyeon.androidexampleapplication.databinding.ActivityMainBinding;
 import dev.ehyeon.androidexampleapplication.di.EHyeonComponent;
 
 public class MainActivity extends AppCompatActivity {
 
-    ActivityMainBinding binding;
-
-    @Inject
-    UserViewModelFactory userViewModelFactory;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        EHyeonComponent component = ((EHyeonApplication) getApplication()).getComponent();
-        component.inject(this);
+        initMainFragment();
 
-        UserViewModel userViewModel = new ViewModelProvider(this, userViewModelFactory)
-                .get(UserViewModel.class);
+        binding.bottomNavigation.setOnItemSelectedListener(item -> updateFragmentById(item.getItemId()));
+    }
 
-        CustomAdapter adapter = new CustomAdapter(userViewModel.findAllUser());
+    private void initMainFragment() {
+        Fragment daggerFragment = getFragmentById(R.id.item_dagger);
+        if (daggerFragment == null) {
+            daggerFragment = new DaggerFragment();
+        }
 
-        binding.recyclerView.setAdapter(adapter);
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        binding.recyclerView.addItemDecoration(new DividerItemDecoration(this, 1)); // 구분선
+        Fragment retrofit2Fragment = getFragmentById(R.id.item_retrofit2);
+        if (retrofit2Fragment == null) {
+            retrofit2Fragment = new Retrofit2Fragment();
+        }
 
-        userViewModel.findAllUserToLiveData().observe(this, adapter::updateList);
+        if (!daggerFragment.isAdded()) {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.container, daggerFragment, MainFragmentType.of(R.id.item_dagger).getTag())
+                    .show(daggerFragment).commit();
+        }
 
-        binding.button.setOnClickListener(view -> {
-            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        if (!retrofit2Fragment.isAdded()) {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.container, retrofit2Fragment, MainFragmentType.of(R.id.item_retrofit2).getTag())
+                    .hide(retrofit2Fragment).commit();
+        }
+    }
 
-            View dialogView = View.inflate(this, R.layout.activity_main_customdialog, null);
+    private boolean updateFragmentById(int id) {
+        Stream.of(MainFragmentType.values())
+                .forEach(mainFragmentType -> {
+                    if (mainFragmentType.getId() == id) {
+                        getSupportFragmentManager().beginTransaction()
+                                .show(getFragmentById(mainFragmentType.getId())).commit();
+                    } else {
+                        getSupportFragmentManager().beginTransaction()
+                                .hide(getFragmentById(mainFragmentType.getId())).commit();
+                    }
+                });
+        return true;
+    }
 
-            dialogBuilder.setView(dialogView);
+    private Fragment getFragmentById(int id) {
+        return getSupportFragmentManager().findFragmentByTag(MainFragmentType.of(id).getTag());
+    }
 
-            dialogBuilder.setPositiveButton("확인", (dialog, which) -> {
-                EditText etEmail = dialogView.findViewById(R.id.etEmail);
-                EditText etName = dialogView.findViewById(R.id.etName);
-
-                userViewModel.saveUser(new UserDto(etEmail.getText().toString(), etName.getText().toString()));
-            });
-
-            dialogBuilder.setNegativeButton("취소", null);
-
-            dialogBuilder.show();
-        });
+    public EHyeonComponent getComponent() {
+        return ((EHyeonApplication) getApplication()).getComponent();
     }
 }
