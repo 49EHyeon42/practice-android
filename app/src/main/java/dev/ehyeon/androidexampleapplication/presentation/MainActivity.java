@@ -59,18 +59,33 @@ public class MainActivity extends AppCompatActivity {
 //
 //            dialogBuilder.show();
 //        });
-
-        // init fragment
-        DaggerFragment daggerFragment = new DaggerFragment();
-        Retrofit2Fragment retrofit2Fragment = new Retrofit2Fragment();
-
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.container, daggerFragment, MainFragmentType.of(R.id.item_dagger).getTag())
-                .add(R.id.container, retrofit2Fragment, MainFragmentType.of(R.id.item_retrofit2).getTag())
-                .show(daggerFragment)
-                .hide(retrofit2Fragment).commit();
+        initMainFragment();
 
         binding.bottomNavigation.setOnItemSelectedListener(item -> updateFragmentById(item.getItemId()));
+    }
+
+    private void initMainFragment() {
+        Fragment daggerFragment = getFragmentById(R.id.item_dagger);
+        if (daggerFragment == null) {
+            daggerFragment = new DaggerFragment();
+        }
+
+        Fragment retrofit2Fragment = getFragmentById(R.id.item_retrofit2);
+        if (retrofit2Fragment == null) {
+            retrofit2Fragment = new Retrofit2Fragment();
+        }
+
+        if (!daggerFragment.isAdded()) {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.container, daggerFragment, MainFragmentType.of(R.id.item_dagger).getTag())
+                    .show(daggerFragment).commit();
+        }
+
+        if (!retrofit2Fragment.isAdded()) {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.container, retrofit2Fragment, MainFragmentType.of(R.id.item_retrofit2).getTag())
+                    .hide(retrofit2Fragment).commit();
+        }
     }
 
     private boolean updateFragmentById(int id) {
