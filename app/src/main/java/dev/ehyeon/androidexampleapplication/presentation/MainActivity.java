@@ -3,6 +3,9 @@ package dev.ehyeon.androidexampleapplication.presentation;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+
+import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
@@ -57,35 +60,34 @@ public class MainActivity extends AppCompatActivity {
 //            dialogBuilder.show();
 //        });
 
+        // init fragment
         DaggerFragment daggerFragment = new DaggerFragment();
         Retrofit2Fragment retrofit2Fragment = new Retrofit2Fragment();
 
-        getSupportFragmentManager().beginTransaction().add(R.id.containers, daggerFragment).commit();
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.container, daggerFragment, MainFragmentType.of(R.id.item_dagger).getTag())
+                .add(R.id.container, retrofit2Fragment, MainFragmentType.of(R.id.item_retrofit2).getTag())
+                .show(daggerFragment)
+                .hide(retrofit2Fragment).commit();
 
-        binding.bottomNavigation.setOnItemSelectedListener(item -> {
-            if (item.getItemId() == R.id.menu_dagger) {
-                if (daggerFragment.isAdded()) {
-                    getSupportFragmentManager().beginTransaction().show(daggerFragment).commit();
-                } else {
-                    getSupportFragmentManager().beginTransaction().add(R.id.containers, daggerFragment).commit();
-                }
+        binding.bottomNavigation.setOnItemSelectedListener(item -> updateFragmentById(item.getItemId()));
+    }
 
-                getSupportFragmentManager().beginTransaction().hide(retrofit2Fragment).commit();
+    private boolean updateFragmentById(int id) {
+        Stream.of(MainFragmentType.values())
+                .forEach(mainFragmentType -> {
+                    if (mainFragmentType.getId() == id) {
+                        getSupportFragmentManager().beginTransaction()
+                                .show(getFragmentById(mainFragmentType.getId())).commit();
+                    } else {
+                        getSupportFragmentManager().beginTransaction()
+                                .hide(getFragmentById(mainFragmentType.getId())).commit();
+                    }
+                });
+        return true;
+    }
 
-                return true;
-            } else if (item.getItemId() == R.id.menu_retrofit2) {
-                if (retrofit2Fragment.isAdded()) {
-                    getSupportFragmentManager().beginTransaction().show(retrofit2Fragment).commit();
-                } else {
-                    getSupportFragmentManager().beginTransaction().add(R.id.containers, retrofit2Fragment).commit();
-                }
-
-                getSupportFragmentManager().beginTransaction().hide(daggerFragment).commit();
-
-                return true;
-            }
-
-            return false;
-        });
+    private Fragment getFragmentById(int id) {
+        return getSupportFragmentManager().findFragmentByTag(MainFragmentType.of(id).getTag());
     }
 }

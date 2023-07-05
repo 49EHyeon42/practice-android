@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/menu_dagger"
+        android:id="@+id/item_dagger"
         android:title="dagger"
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/menu_retrofit2"
+        android:id="@+id/item_retrofit2"
         android:title="retrofit2"
         app:showAsAction="ifRoom" />
 
